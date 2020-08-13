@@ -11,13 +11,25 @@
 </head>
 
 <body>
+    <!-- Sidebar -->
+    <div id="sidebar" class="bg-secondary">
+        <div class="sidebar-header bg-primary pl-3">
+            <div>Bootstrap Sidebar</div>
+            <div class="d-flex flex-row justify-content-between">
+                <div class="align-self-center text-light">User Name here</div>
+                <button id="dismiss" class="btn" type="button"><img src="assets/icons/hamburger-icon-white.svg"></button>
+            </div>
+            
+        </div>
+    </div>
+
     <!-- Page Content -->
     <div id="main-container" class="bg-warning">
         <header role="banner" id="search-bar-container" class="bg-dark h-100">
             <nav role="navigation">
                 <div class="input-group mb-3" id="search-bar">
                     <div class="input-group-prepend">
-                        <button class="btn" type="button"><img src="assets/icons/hamburger-icon.svg"></button>
+                        <button id="sidebarCollapse" class="btn" type="button"><img src="assets/icons/hamburger-icon.svg"></button>
                     </div>
                     <input type="text" class="form-control border-0" placeholder="Search places" aria-label=""
                         aria-describedby="basic-addon1">
@@ -53,23 +65,24 @@
             <ul class="list-inline m-0">
                 <div class="d-flex align-content-end">
                     <li class="list-inline-item mr-auto">
-                        <div class="logo-link d-flex align-content-center justify-content-between"
-                            style="width:55px">
-                            <a href="https://edwardreyes29.github.io/edward-reyes-portfolio/" target="_blank" title="Edward Reyes"><img src="assets/icons/edward-reyes-logo-black.svg"
+                        <div class="logo-link d-flex align-content-center justify-content-between" style="width:55px">
+                            <a href="https://edwardreyes29.github.io/edward-reyes-portfolio/" target="_blank"
+                                title="Edward Reyes"><img src="assets/icons/edward-reyes-logo-black.svg"
                                     alt="Edward Reyes Logo" width="18" style="float:left;"></a>
                             <p class="copyright" style="font-size:0.5em">&copy; 2020</p>
                         </div>
                     </li>
                     <li class="list-inline-item">
-                        <a href="https://github.com/edwardreyes29/WeatherApp" title="Check out my GitHub" target="_blank">
+                        <a href="https://github.com/edwardreyes29/WeatherApp" title="Check out my GitHub"
+                            target="_blank">
                             <img src="assets/icons/github.svg" width="18">
                         </a>
                     </li>
-
                 </div>
             </ul>
         </footer>
     </div>
+    
     <!-- JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

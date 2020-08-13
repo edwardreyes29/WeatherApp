@@ -35,3 +35,20 @@ footer {
     padding-left: 7px;
     padding-right: 7px;
 }
+
+/** Styling for side bar */
+#sidebar {
+    transition: all 0.3s;
+    min-width: 300px;
+    max-width: 300px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* top layer */
+    z-index: 9999;
+}
+
+#sidebar.active {
+    margin-left: -300px;
+}
