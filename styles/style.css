@@ -50,7 +50,7 @@ footer {
 }
 
 #sidebar.active {
-    margin-left: -300px;
+    margin-left: -310px;
 }
 
 /** TODO add styling to change background dynamically based on time of day **/
