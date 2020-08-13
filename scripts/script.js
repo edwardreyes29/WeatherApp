@@ -8,3 +8,5 @@ $(document).ready(function () {
         $('#sidebar').addClass('active');
     });
 });
+
+/** TODO add styling to change background dynamically based on time of day **/

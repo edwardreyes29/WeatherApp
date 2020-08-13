@@ -12,7 +12,7 @@
 
 <body>
     <!-- Sidebar -->
-    <div id="sidebar" class="bg-secondary">
+    <div id="sidebar" class="bg-secondary active">
         <div class="sidebar-header bg-primary pl-3">
             <div>Bootstrap Sidebar</div>
             <div class="d-flex flex-row justify-content-between">
@@ -24,15 +24,20 @@
     </div>
 
     <!-- Page Content -->
-    <div id="main-container" class="bg-warning">
+    <div id="main-container">
         <header role="banner" id="search-bar-container" class="bg-dark h-100">
             <nav role="navigation">
-                <div class="input-group mb-3" id="search-bar">
+                <div class="input-group mb-3 dropdown bg-light" id="search-bar">
                     <div class="input-group-prepend">
                         <button id="sidebarCollapse" class="btn" type="button"><img src="assets/icons/hamburger-icon.svg"></button>
                     </div>
-                    <input type="text" class="form-control border-0" placeholder="Search places" aria-label=""
-                        aria-describedby="basic-addon1">
+                    <input type="text" class="form-control border-0 dropdown-toggle" placeholder="Search places" aria-label=""
+                        aria-describedby="basic-addon1" id="dropdownHistory" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown-menu w-100 m-0" aria-labelledby="dropdownHistory">
+                            <button class="dropdown-item" type="button">Searched 1</button>
+                            <button class="dropdown-item" type="button">Searched 2</button>
+                            <button class="dropdown-item" type="button">Searched 3</button>
+                        </div>
                     <div class="input-group-append">
                         <button class="btn" type="button"><img src="assets/icons/search-icon.svg"></button>
                     </div>
@@ -61,7 +66,7 @@
                 <div class="tab-pane fade" id="days" role="tabpanel" aria-labelledby="days-tab">5 Days</div>
             </div>
         </main>
-        <footer role="contentinfo" class="pt-2 pl-2 pr-2">
+        <footer role="contentinfo" class="bg-light pt-2 pl-2 pr-2">
             <ul class="list-inline m-0">
                 <div class="d-flex align-content-end">
                     <li class="list-inline-item mr-auto">

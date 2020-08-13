@@ -1,0 +1,31 @@
+From 12am to 12 pm
+
+7400B8
+6930C3
+5E60CE
+5390D9
+4EA8DE
+48BFE3
+56CFE1
+64DFDF
+72EFDD
+80FFDB
+
+https://coolors.co/7400b8-6930c3-5e60ce-5390d9-4ea8de-48bfe3-56cfe1-64dfdf-72efdd-80ffdb
+
+change color every 1.2 hours
+or 1 hour and 12 minutes
+or 72
+
+7400B8 0:00 to 1:12
+6930C3 1:12 to 2:24
+5E60CE 2:24 to 3:36
+5390D9 3:36 to 4:48
+4EA8DE 4:48 to 6:00
+48BFE3 6:00 to 7:12
+56CFE1 7:12 to 8:24
+64DFDF 8:24 to 9:36
+72EFDD 9:36 to 10:48
+80FFDB 10:48 to 12:00
+
+So every 72 hours change color pallette

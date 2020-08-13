@@ -24,9 +24,9 @@ footer {
     height: 40px;
 }
 
-#search-bar{
+/* #search-bar{
     background: #ffffff;
-}
+} */
 
 #search-bar-container {
     margin: 0px;
@@ -52,3 +52,5 @@ footer {
 #sidebar.active {
     margin-left: -300px;
 }
+
+/** TODO add styling to change background dynamically based on time of day **/
