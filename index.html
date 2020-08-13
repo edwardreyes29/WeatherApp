@@ -19,7 +19,7 @@
                     <div class="input-group-prepend">
                         <button class="btn" type="button"><img src="assets/icons/hamburger-icon.svg"></button>
                     </div>
-                    <input type="text" class="form-control border-0" placeholder="" aria-label=""
+                    <input type="text" class="form-control border-0" placeholder="Search places" aria-label=""
                         aria-describedby="basic-addon1">
                     <div class="input-group-append">
                         <button class="btn" type="button"><img src="assets/icons/search-icon.svg"></button>
@@ -27,29 +27,47 @@
                 </div>
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link bg-dark text-light active" id="today-tab" data-toggle="tab" href="#today" role="tab"
-                            aria-controls="today" aria-selected="true">Today</a>
+                        <a class="nav-link bg-dark text-light active" id="today-tab" data-toggle="tab" href="#today"
+                            role="tab" aria-controls="today" aria-selected="true">Today</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link bg-dark text-secondary" id="tomorrow-tab" data-toggle="tab" href="#tomorrow" role="tab"
-                            aria-controls="tomorrow" aria-selected="false">Tomorrow</a>
+                        <a class="nav-link bg-dark text-secondary" id="tomorrow-tab" data-toggle="tab" href="#tomorrow"
+                            role="tab" aria-controls="tomorrow" aria-selected="false">Tomorrow</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link bg-dark text-secondary" id="days-tab" data-toggle="tab" href="#days" role="tab"
-                            aria-controls="days" aria-selected="false">5 Days</a>
+                        <a class="nav-link bg-dark text-secondary" id="days-tab" data-toggle="tab" href="#days"
+                            role="tab" aria-controls="days" aria-selected="false">5 Days</a>
                     </li>
                 </ul>
             </nav>
         </header>
         <main role="main" class="container">
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="today" role="tabpanel" aria-labelledby="today-tab">Today</div>
+                <div class="tab-pane fade show active" id="today" role="tabpanel" aria-labelledby="today-tab">Today
+                </div>
                 <div class="tab-pane fade" id="tomorrow" role="tabpanel" aria-labelledby="tomorrow-tab">Tomorrow</div>
                 <div class="tab-pane fade" id="days" role="tabpanel" aria-labelledby="days-tab">5 Days</div>
             </div>
         </main>
-        <footer role="contentinfo">
+        <footer role="contentinfo" class="pt-2 pl-2 pr-2">
+            <ul class="list-inline m-0">
+                <div class="d-flex align-content-end">
+                    <li class="list-inline-item mr-auto">
+                        <div class="logo-link d-flex align-content-center justify-content-between"
+                            style="width:55px">
+                            <a href="https://edwardreyes29.github.io/edward-reyes-portfolio/" target="_blank" title="Edward Reyes"><img src="assets/icons/edward-reyes-logo-black.svg"
+                                    alt="Edward Reyes Logo" width="18" style="float:left;"></a>
+                            <p class="copyright" style="font-size:0.5em">&copy; 2020</p>
+                        </div>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://github.com/edwardreyes29/WeatherApp" title="Check out my GitHub" target="_blank">
+                            <img src="assets/icons/github.svg" width="18">
+                        </a>
+                    </li>
 
+                </div>
+            </ul>
         </footer>
     </div>
     <!-- JS, Popper.js, and jQuery -->
