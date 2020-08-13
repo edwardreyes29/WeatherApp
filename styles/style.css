@@ -4,7 +4,6 @@ body {
     position: relative;
 }
 
-/** Styling for main-container */
 #main-container {
     min-height: 100vh; /* will cover the 100% of viewport */
     overflow: hidden;
@@ -19,14 +18,12 @@ footer {
     width: 100%;
 }
 
+/** Styling for content*/
+
 #square {
     width: 45px;
     height: 40px;
 }
-
-/* #search-bar{
-    background: #ffffff;
-} */
 
 #search-bar-container {
     margin: 0px;
