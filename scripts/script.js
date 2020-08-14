@@ -1,3 +1,5 @@
+// TODO: add styling to change background dynamically based on time of day
+
 /* Toggle side bar display */
 $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
@@ -7,9 +9,6 @@ $(document).ready(function () {
         $('#sidebar').addClass('active');
     });
 });
-
-// TODO: add styling to change background dynamically based on time of day
-
 
 /*######## Open Weather API ########*/
 
@@ -21,48 +20,55 @@ var cityName;
 // TODO: get cityName from input
 
 // test data
-cityName = "Los Angeles";
+cityName = "Paris";
 
 /* Current weather data */
-const CURRENT_QUERY_URL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${OW_API_KEY}`;
-$.ajax({
-    url: CURRENT_QUERY_URL,
-    method: "GET"
-})
-    .then(function (response) {
-        console.log(response)
+const displayCurrentWeather = (cityName) => {
+    // Set Google Search url
+    $("#web-results").attr("href", `http://www.google.com/search?q=${cityName}+weather`);
 
-        /* Display location data */
-        var countryCode = response.sys.country;
-        $(".city-name").html(cityName + ', ' + countryCode);
+    const CURRENT_QUERY_URL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${OW_API_KEY}`;
+    $.ajax({
+        url: CURRENT_QUERY_URL,
+        method: "GET"
+    })
+        .then(function (response) {
+            console.log(response)
 
-        /* Display Current Date */
-        formatDate(response, "current");
+            /* Display location data */
+            var countryCode = response.sys.country;
+            $(".city-name").html(cityName + ', ' + countryCode);
 
-        /* Display weather icon and description */
-        displayIcon(response, "current");
+            /* Display Current Date */
+            formatDate(response, "current");
 
-        /* Display Temperatures in fahr*/
-        const tempKelvin = parseFloat(response.main.temp);
-        const tempKelvinMax = parseFloat(response.main.temp_max);
-        const tempKelvinMin = parseFloat(response.main.temp_min);
-        const tempKelvinFeels = parseFloat(response.main.feels_like);
-        displayTemperatures(tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, "current");
+            /* Display weather icon and description */
+            displayIcon(response, "current");
 
-        /* Display humidity and wind speed */
-        const humidity = response.main.humidity;
-        const windSpeed = response.wind.speed;
-        $("#current-humidity").html(`Humidity: <span class="font-weight-bold">${humidity}%</span>`);
-        $("#current-wind-speed").html(`Wind Speed: <span class="font-weight-bold">${windSpeed} MPH </span>`);
+            /* Display Temperatures in fahr*/
+            const tempKelvin = parseFloat(response.main.temp);
+            const tempKelvinMax = parseFloat(response.main.temp_max);
+            const tempKelvinMin = parseFloat(response.main.temp_min);
+            const tempKelvinFeels = parseFloat(response.main.feels_like);
+            displayTemperatures(tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, "current");
 
-        // display UV Data
-        displayUVIndex(response);
+            /* Display humidity and wind speed */
+            const humidity = response.main.humidity;
+            const windSpeed = response.wind.speed;
+            $("#current-humidity").html(`Humidity: <span class="font-weight-bold">${humidity}%</span>`);
+            $("#current-wind-speed").html(`Wind Speed: <span class="font-weight-bold">${windSpeed} MPH </span>`);
 
-        // Display Tomorrow's weather
-        displayTomorrowWeather(response);
-    });
+            // display UV Data
+            getUVIndexData(response);
 
-const displayUVIndex = (responseCurrent) => {
+            // Display Tomorrow's weather
+            displayTomorrowWeather(response);
+        });
+}
+
+displayCurrentWeather(cityName);
+
+const getUVIndexData = (responseCurrent) => {
     /* UV  days data  */
     const lon = responseCurrent.coord.lon;
     const lat = responseCurrent.coord.lat;
@@ -72,20 +78,23 @@ const displayUVIndex = (responseCurrent) => {
         method: "GET"
     }).then(function (response) {
         const uvIndex = parseInt(response.value);
-
-        /* Determine uv risk and display results*/
-        if (uvIndex < 3) {
-            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-success">Low</span>`);
-        } else if (uvIndex <= 5) {
-            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-warning">Moderate</span>`);
-        } else if (uvIndex <= 7) {
-            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-danger">High</span>`);
-        } else if (uvIndex <= 10) {
-            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-danger">Very High</span>`);
-        } else if (uvIndex >= 11) {
-            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-danger">Extreme</span>`);
-        }
+        displayUVI(uvIndex, "current");
     })
+}
+
+const displayUVI = (uvi, timeline) => {
+    /* Determine uv risk and display results*/
+    if (uvi < 3) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-success">Low</span>`);
+    } else if (uvi <= 5) {
+        $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-warning">Moderate</span>`);
+    } else if (uvi <= 7) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">High</span>`);
+    } else if (uvi <= 10) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Very High</span>`);
+    } else if (uvi >= 11) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Extreme</span>`);
+    }
 }
 
 const displayTomorrowWeather = (response) => {
@@ -93,13 +102,12 @@ const displayTomorrowWeather = (response) => {
     const lon = response.coord.lon;
     const lat = response.coord.lat;
     const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${OW_API_KEY}`;
-        
+
     $.ajax({
         url: UV_QUERY_URL,
         method: "GET"
     }).then(function (response) {
         const tomorrowsData = response.daily[1];
-        console.log(tomorrowsData);
         /* Display Date */
         formatDate(tomorrowsData, "tomorrow");
 
@@ -112,6 +120,16 @@ const displayTomorrowWeather = (response) => {
         const tempKelvinMin = parseFloat(tomorrowsData.temp.min);
         const tempKelvinFeels = parseFloat(tomorrowsData.feels_like.day);
         displayTemperatures(tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, "tomorrow");
+
+        /* Display humidity and wind speed */
+        const humidity = tomorrowsData.humidity;
+        const windSpeed = tomorrowsData.wind_speed;
+        $("#tomorrow-humidity").html(`Humidity: <span class="font-weight-bold">${humidity}%</span>`);
+        $("#tomorrow-wind-speed").html(`Wind Speed: <span class="font-weight-bold">${windSpeed} MPH </span>`);
+
+        /* Display UVI */
+        const uvIndex = parseInt(tomorrowsData.uvi);
+        displayUVI(uvIndex, "tomorrow");
     })
 }
 
@@ -138,29 +156,6 @@ const displayTemperatures = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvi
     $(`#${timeline}-max`).html(`max: ${tempFahrMax.toFixed(1)}`).attr("data-temp", tempKelvinMax);
     $(`#${timeline}-feels`).html(`Feels like ${tempFahrFeels.toFixed(1)}`).attr("data-temp", tempKelvinFeels);
 }
-
-// /* UV 8 days data  */
-// const lon = response.coord.lon;
-// const lat = response.coord.lat;
-// const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/uvi/forecast?appid=${OW_API_KEY}&lat=${lat}&lon=${lon}`;
-// $.ajax({
-//     url: UV_QUERY_URL,
-//     method: "GET"
-// }).then(function (response) {
-//     console.log(response);
-// })
-
-/* 5 day forecast data */
-// const FIVE_DAY_FORECAST_URL =`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${OW_API_KEY}`;
-// $.ajax({
-//     url: FIVE_DAY_FORECAST_URL,
-//     method: "GET"
-// })
-// .then(function(response) {
-//     console.log("5 day")
-//     console.log(response);
-// });
-
 
 /*######## Additional function ########*/
 // Format Date function
@@ -193,7 +188,7 @@ const formatDate = (data, timeline) => {
     const date = d.getDate();
     const monthName = months[d.getMonth()];
     const getHour = d.getHours();
-    const dayName = days[d.getDay()] 
+    const dayName = days[d.getDay()]
     var hour;
     var period;
     if (getHour > 12) {
@@ -208,9 +203,6 @@ const formatDate = (data, timeline) => {
 
         period = "AM"
     }
-    if (hour.toString().length == 1) {
-        hour = "0" + hour;
-    }
     var minutes = d.getMinutes();
     if (minutes.toString().length == 1) {
         minutes = "0" + minutes;
@@ -221,7 +213,7 @@ const formatDate = (data, timeline) => {
         formatted = `${monthName} ${date}, ${hour}:${minutes} ${period}`;
     } else if (timeline === "tomorrow") {
         formatted = `${dayName}, ${monthName} ${date}`;
-    }   
+    }
 
     // return formatted;
     $(`#${timeline}-date`).html(formatted);
