@@ -18,7 +18,7 @@
             <div class="d-flex flex-row justify-content-between">
                 <div class="align-self-center text-light">User Name here</div>
                 <button id="dismiss" class="btn" type="button"><img
-                        src="assets/icons/hamburger-icon-white.svg"></button>
+                        src="assets/icons/list.svg"></button>
             </div>
 
         </div>
@@ -31,7 +31,7 @@
                 <div class="input-group mb-3 dropdown bg-light" id="search-bar">
                     <div class="input-group-prepend">
                         <button id="sidebarCollapse" class="btn" type="button"><img
-                                src="assets/icons/hamburger-icon.svg"></button>
+                                src="assets/icons/list.svg"></button>
                     </div>
                     <input type="text" class="form-control border-0 dropdown-toggle" placeholder="Search places"
                         aria-label="" aria-describedby="basic-addon1" id="dropdownHistory" data-toggle="dropdown"
@@ -42,7 +42,7 @@
                         <button class="dropdown-item" type="button">Searched 3</button>
                     </div>
                     <div class="input-group-append">
-                        <button class="btn" type="button"><img src="assets/icons/search-icon.svg"></button>
+                        <button class="btn" type="button"><img src="assets/icons/search.svg"></button>
                     </div>
                 </div>
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
@@ -63,31 +63,35 @@
         </header>
         <main role="main" class="container">
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="today" role="tabpanel" aria-labelledby="today-tab";>
-                    <h2 id="current-city-name" class="w-100">Atlanta</h2>
-                    <h3>Friday, August 14</h3>
+                <div class="tab-pane fade show active" id="today" role="tabpanel" aria-labelledby="today-tab" ;>
+                    <h2 id="current-city" class="w-100">Location</h2>
+                    <p id="current-date">Date</p>
                     <div id="current-temp-container w-100" class="row">
                         <div class="col-9 bg-info d-flex p-0">
                             <div class="bg-success w-100 pl-3">
-                                <p class="align-self-center m-0">min: 96 * max: 101</p>
+                                <p id="current-min-max" class="align-self-center m-0">
+                                    <span id="current-min" class="fahr-display">min: -- </span>
+                                    <img src="assets/icons/dot.svg">
+                                    <span id="current-max" class="fahr-display">max: --</span>
+                                </p>
                                 <div class="bg-primary w-100">
-                                    <h3 class="align-self-center m-0" style="font-size:5rem;">80 F</h3>
+                                    <h3 id="current-temp" class="align-self-center m-0 fahr-display" style="font-size:4rem;">--</h3>
                                 </div>
-                                <p class="align-self-center m-0">Feels like 80</p>
+                                <p id="current-feels" class="fahr-display" class="align-self-center m-0">Feels like --</p>
                             </div>
-                            
+
                         </div>
                         <div id="current-weather-container" class="col-3 bg-danger">
                             <div>
-                                <img src="" id="current-weather-icon" class="img-fluid">
-                                <p id="current-weather">Clouds</p>
-                            </div> 
+                                <img src="" id="current-icon" class="img-fluid">
+                                <p id="current-main" class="m-0"></p>
+                                <p id="current-description" class="m-0" style="font-size: x-small"></p>
+                            </div>
                         </div>
                         <div id="current-info-container" class="pl-3 bg-info w-100">
-                            <div id="current-temp">Temperature: 90.9F</div>
-                            <div id="current-humidity">Humidity: 41%</div>
-                            <div id="current-wind-speed">Wind Speed: 4.7 MPH</div>
-                            <div id="current-uv-index">UV Index: 9.49</div>
+                            <div id="current-humidity">Humidity: --%</div>
+                            <div id="current-wind-speed">Wind Speed: -- MPH</div>
+                            <div id="current-uv-index">UV Index: --</div>
                         </div>
                     </div>
                 </div>

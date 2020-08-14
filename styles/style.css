@@ -51,6 +51,10 @@ footer {
     margin: 15px;
 }
 
+.fahr-display:after{
+    content:"°F";
+}
+
 /** Styling for side bar */
 #sidebar {
     transition: all 0.3s;
