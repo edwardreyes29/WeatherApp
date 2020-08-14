@@ -41,13 +41,13 @@ $.ajax({
     const currentDate = formatDate(date);
     $("#current-date").html(currentDate);
 
-    /* Display weather data */
+    /* Display weather icon and description */
     const iconCode = response.weather[0].icon;
     const main = response.weather[0].main;
     const description = response.weather[0].description;
     const iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
     $("#current-icon").attr("src", iconURL);
-    $("#current-main").html(main);
+    $("#current-main").html(`<span class="font-weight-bold">${main}</span>`);
     $("#current-description").html(description);
 
     /* Display Temperatures in fahr*/
@@ -66,8 +66,49 @@ $.ajax({
     $("#current-max").html(`max: ${tempFahrMax.toFixed(1)}`).attr("data-temp", tempKelvinMax);
     $("#current-feels").html(`Feels like ${tempFahrFeels.toFixed(1)}`).attr("data-temp", tempKelvinFeels);
 
-    
+    /* Display humidity and wind speed */
+    const humidity = response.main.humidity;
+    const windSpeed = response.wind.speed;
+    $("#current-humidity").html(`Humidity: <span class="font-weight-bold">${humidity}</span>`);
+    $("#current-wind-speed").html(`Wind Speed: <span class="font-weight-bold">${windSpeed} MPH </span>`);
+
+    /* UV  days data  */
+    const lon = response.coord.lon;
+    const lat = response.coord.lat;
+    const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/uvi?appid=${OW_API_KEY}&lat=${lat}&lon=${lon}`;
+    $.ajax({
+        url: UV_QUERY_URL,
+        method: "GET"
+    }).then(function(response){
+        console.log(response);
+        const uvIndex = parseInt(response.value);
+        console.log(uvIndex);
+        
+        /* Determine uv risk and display results*/
+        if (uvIndex < 3) {
+            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-success">Low</span>`);
+        } else if (uvIndex <= 5) {
+            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-warning">Moderate</span>`); 
+        } else if (uvIndex <= 7) {
+            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-danger">High</span>`);
+        } else if (uvIndex <= 10) {
+            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-danger">Very High</span>`);
+        } else if (uvIndex >= 11) {
+            $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvIndex}</span> <span class="badge badge-danger">Extreme</span>`);
+        }
+    })
 }); 
+
+ /* UV 8 days data  */
+//  const lon = response.coord.lon;
+//  const lat = response.coord.lat;
+//  const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/uvi/forecast?appid=${OW_API_KEY}&lat=${lat}&lon=${lon}`;
+//  $.ajax({
+//      url: UV_QUERY_URL,
+//      method: "GET"
+//  }).then(function(response){
+//      console.log(response);
+//  })
 
 /* 5 day forecast data */
 const FIVE_DAY_FORECAST_URL =`https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${OW_API_KEY}`;
@@ -107,10 +148,22 @@ const formatDate = (d) => {
         hour = getHour - 12;
         period = "PM"
     } else {
-        hour = getHour;
+        if (getHour === 0) {
+            hour = 12;
+        } else {
+            hour = getHour;
+        }
+        
         period = "AM"
     }
-    const minutes = d.getMinutes();
+    if (hour.toString().length == 1) {
+        hour = "0" + hour;
+    }
+    var minutes = d.getMinutes();
+    if (minutes.toString().length == 1) {
+        minutes = "0" + minutes;
+    }
+    
     const formatted = `${monthName} ${date}, ${hour}:${minutes} ${period}`;
     return formatted;
 }
