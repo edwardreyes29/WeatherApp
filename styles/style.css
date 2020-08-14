@@ -33,11 +33,12 @@ footer {
     padding-right: 7px;
 }
 
-#current-weather-container {
+#current-weather-container, #tomorrow-weather-container  {
     height: 10em;
     position: relative
 }
-#current-weather-container div {
+
+#current-weather-container div, #tomorrow-weather-container div{
     margin: 0;
     /* background: yellow; */
     position: absolute;
@@ -45,10 +46,6 @@ footer {
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%) 
-}
-
-#current-temp-container {
-    margin: 15px;
 }
 
 .fahr-display:after{
