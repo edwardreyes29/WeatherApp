@@ -1,5 +1,48 @@
 // TODO: add styling to change background dynamically based on time of day
 
+/*######## HTML interactivity ########*/
+
+/* Displays the weather panes */
+const displayWeatherPane = (timeline) => {
+    $(`#${timeline}`).append(`
+        <h2 class="city-name" class="w-100">Location</h2>
+        <p id="${timeline}-date">Date</p>
+        <div id="${timeline}-temp-container w-100" class="row">
+            <div class="col-9 bg-info d-flex p-0">
+                <div class="bg-success w-100 pl-3">
+                    <p id="${timeline}-min-max" class="align-self-center m-0">
+                        <span id="${timeline}-min" class="fahr-display">min: -- </span>
+                        <img src="assets/icons/dot.svg">
+                        <span id="${timeline}-max" class="fahr-display">max: --</span>
+                    </p>
+                    <div class="bg-primary w-100">
+                        <h3 id="${timeline}-temp" class="align-self-center m-0 fahr-display"
+                            style="font-size:4rem;">--</h3>
+                    </div>
+                    <p id="${timeline}-feels" class="fahr-display" class="align-self-center m-0">Feels like --
+                    </p>
+                </div>
+
+            </div>
+            <div id="${timeline}-weather-container" class="col-3 bg-danger">
+                <div>
+                    <img src="" id="${timeline}-icon" class="img-fluid">
+                    <p id="${timeline}-main" class="m-0"></p>
+                    <p id="${timeline}-description" class="m-0" style="font-size: x-small"></p>
+                </div>
+            </div>
+            <div id="${timeline}-info-container" class="pl-3 bg-info w-100">
+                <div id="${timeline}-humidity">Humidity: --%</div>
+                <div id="${timeline}-wind-speed">Wind Speed: -- MPH</div>
+                <div id="${timeline}-uv-index">UV Index: --</div>
+            </div>
+        </div>
+    `)
+}
+/* Display weather panes for current day and tomorrow*/
+displayWeatherPane("current");
+displayWeatherPane("tomorrow");
+
 /* Toggle side bar display */
 $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
@@ -70,35 +113,6 @@ const displayCurrentWeather = (cityName) => {
 
 displayCurrentWeather(cityName);
 
-const getUVIndexData = (responseCurrent) => {
-    /* UV  days data  */
-    const lon = responseCurrent.coord.lon;
-    const lat = responseCurrent.coord.lat;
-    const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/uvi?appid=${OW_API_KEY}&lat=${lat}&lon=${lon}`;
-    $.ajax({
-        url: UV_QUERY_URL,
-        method: "GET"
-    }).then(function (response) {
-        const uvIndex = parseInt(response.value);
-        displayUVI(uvIndex, "current");
-    })
-}
-
-const displayUVI = (uvi, timeline) => {
-    /* Determine uv risk and display results*/
-    if (uvi < 3) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-success">Low</span>`);
-    } else if (uvi <= 5) {
-        $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-warning">Moderate</span>`);
-    } else if (uvi <= 7) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">High</span>`);
-    } else if (uvi <= 10) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Very High</span>`);
-    } else if (uvi >= 11) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Extreme</span>`);
-    }
-}
-
 const displayTomorrowWeather = (response) => {
     /* UV 8 days data  */
     const lon = response.coord.lon;
@@ -133,7 +147,69 @@ const displayTomorrowWeather = (response) => {
         /* Display UVI */
         const uvIndex = parseInt(tomorrowsData.uvi);
         displayUVI(uvIndex, "tomorrow");
+        displayCards();
     })
+}
+
+/* create card elements for bootstrap accordion */
+const displayCards = () => {
+    for (let i = 0; i < 6; i++) {
+        $(".accordion").append(`
+            <div class="card">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button"
+                        data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                        aria-controls="collapseOne">
+                        Card-${i+1}
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                data-parent="#accordionExample">
+                <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                    richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
+                    brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
+                    aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
+                    ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
+                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them
+                    accusamus labore sustainable VHS.
+                </div>
+            </div>
+            </div>
+        `)
+    }
+}
+
+const getUVIndexData = (responseCurrent) => {
+    /* UV  days data  */
+    const lon = responseCurrent.coord.lon;
+    const lat = responseCurrent.coord.lat;
+    const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/uvi?appid=${OW_API_KEY}&lat=${lat}&lon=${lon}`;
+    $.ajax({
+        url: UV_QUERY_URL,
+        method: "GET"
+    }).then(function (response) {
+        const uvIndex = parseInt(response.value);
+        displayUVI(uvIndex, "current");
+    })
+}
+
+const displayUVI = (uvi, timeline) => {
+    /* Determine uv risk and display results*/
+    if (uvi < 3) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-success">Low</span>`);
+    } else if (uvi <= 5) {
+        $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-warning">Moderate</span>`);
+    } else if (uvi <= 7) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">High</span>`);
+    } else if (uvi <= 10) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Very High</span>`);
+    } else if (uvi >= 11) {
+        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Extreme</span>`);
+    }
 }
 
 const displayIcon = (data, timeline) => {
@@ -161,6 +237,7 @@ const displayTemperatures = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvi
 }
 
 /*######## Additional function ########*/
+
 // Format Date function
 const formatDate = (data, timeline) => {
     'use strict';
