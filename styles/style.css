@@ -33,11 +33,29 @@ footer {
     padding-right: 7px;
 }
 
+#current-weather-container {
+    height: 10em;
+    position: relative
+}
+#current-weather-container div {
+    margin: 0;
+    /* background: yellow; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) 
+}
+
+#weather-status-container {
+    margin: 15px;
+}
+
 /** Styling for side bar */
 #sidebar {
     transition: all 0.3s;
-    min-width: 300px;
-    max-width: 300px;
+    min-width: 250px;
+    max-width: 250px;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -47,7 +65,7 @@ footer {
 }
 
 #sidebar.active {
-    margin-left: -310px;
+    margin-left: -260px;
 }
 
 /** TODO add styling to change background dynamically based on time of day **/
