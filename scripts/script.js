@@ -4,9 +4,11 @@
 $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
+        $('.overlay').addClass('active');
     });
     $('#dismiss').on('click', function () {
         $('#sidebar').addClass('active');
+        $('.overlay').removeClass('active');
     });
 });
 
@@ -107,6 +109,7 @@ const displayTomorrowWeather = (response) => {
         url: UV_QUERY_URL,
         method: "GET"
     }).then(function (response) {
+        console.log(response);
         const tomorrowsData = response.daily[1];
         /* Display Date */
         formatDate(tomorrowsData, "tomorrow");
