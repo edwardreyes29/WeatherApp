@@ -18,6 +18,12 @@ footer {
     width: 100%;
 }
 
+/* Removes button highlight */
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 /** Styling for content*/
 
 #square {
@@ -50,6 +56,10 @@ footer {
 
 .fahr-display:after{
     content:"°F";
+}
+
+.degree-display:after{
+    content:"°";
 }
 
 /** Styling for side bar */

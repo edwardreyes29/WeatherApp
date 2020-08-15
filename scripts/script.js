@@ -32,16 +32,72 @@ const displayWeatherPane = (timeline) => {
                 </div>
             </div>
             <div id="${timeline}-info-container" class="pl-3 bg-info w-100">
-                <div id="${timeline}-humidity">Humidity: --%</div>
-                <div id="${timeline}-wind-speed">Wind Speed: -- MPH</div>
-                <div id="${timeline}-uv-index">UV Index: --</div>
+                <div class="row w-100">
+                    <div class="col-6">
+                        <div class="text-secondary">Humidity:</div>
+                        <div class="text-secondary">Wind:</div>
+                        <div class="text-secondary">UV index:</div>
+                    </div>
+                    <div class="col-6">
+                        <div id="${timeline}-humidity">--%</div>
+                        <div id="${timeline}-wind-speed">-- mph</div>
+                        <div id="${timeline}-uv-index">--</div>
+                    </div>
+                </div>
             </div>
-        </div>
-    `)
+        </div>`
+    )
 }
 /* Display weather panes for current day and tomorrow*/
 displayWeatherPane("current");
 displayWeatherPane("tomorrow");
+
+/* create card elements for bootstrap accordion */
+const displayCards = (dataArray) => {
+    for (let i = 0; i < 5; i++) {
+        $(".accordion").append(`
+            <div class="card">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <div class="d-flex">
+                        <button class="btn btn-block text-left pl-0" type="button"
+                            data-toggle="collapse" data-target="#collapse-${i + 1}" aria-expanded="true"
+                            aria-controls="collapse-${i + 1}">
+                            ${dataArray[i].date}
+                            <p class="m-0 text-secondary" style="font-size:0.9rem;">${dataArray[i].description}</p>
+                        </button>
+                        <img src="${dataArray[i].icon_url}"></img>
+                        <div class="ml-2 mb-2 mt-3 text-right">
+                            <p class="m-0 degree-display" data-temp="${dataArray[i].temp_day}" style="font-size: 0.9rem;">${parseInt(kToF(dataArray[i].temp_day))}</p>
+                            <p class="m-0 degree-display data-temp="${dataArray[i].temp_night}" text-secondary" style="font-size: 0.9rem;">${parseInt(kToF(dataArray[i].temp_night))}</p>
+                        </div>
+                    </div>
+                </h2>
+            </div>
+            <div id="collapse-${i + 1}" class="collapse" aria-labelledby="headine-${i + 1}"
+                data-parent="#accordionExample">
+                <div class="card-body">
+                    <div class="row w-100">
+                        <div class="col-6">
+                            <div class="text-secondary">Humidity:</div>
+                            <div class="text-secondary">Wind:</div>
+                            <div class="text-secondary">UV index:</div>
+                        </div>
+                    <div class="col-6">
+                        <div>${dataArray[i].humidity}%</div>
+                        <div>${dataArray[i].wind_speed} mph ${dataArray[i].wind_direction}</div>
+                        <div>${dataArray[i].uvi} ${getUVIAlert(parseInt(dataArray[i].uvi))}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        `)
+    }
+}
+/* Display cards */
+// displayCards();
+
 
 /* Toggle side bar display */
 $(document).ready(function () {
@@ -65,7 +121,7 @@ var cityName;
 // TODO: get cityName from input
 
 // test data
-cityName = "Paris";
+cityName = "Los Angeles";
 
 /* Current weather data */
 const displayCurrentWeather = (cityName) => {
@@ -78,14 +134,14 @@ const displayCurrentWeather = (cityName) => {
         method: "GET"
     })
         .then(function (response) {
-            console.log(response)
-
             /* Display location data */
             var countryCode = response.sys.country;
             $(".city-name").html(cityName + ', ' + countryCode);
 
             /* Display Current Date */
-            formatDate(response, "current");
+            var d = new Date(response.dt * 1000);
+            var currentDate = formatDate(d, "current");
+            $("#current-date").html(currentDate);
 
             /* Display weather icon and description */
             displayIcon(response, "current");
@@ -100,8 +156,10 @@ const displayCurrentWeather = (cityName) => {
             /* Display humidity and wind speed */
             const humidity = response.main.humidity;
             const windSpeed = response.wind.speed;
-            $("#current-humidity").html(`Humidity: <span class="font-weight-bold">${humidity}%</span>`);
-            $("#current-wind-speed").html(`Wind Speed: <span class="font-weight-bold">${windSpeed} MPH </span>`);
+            const windDirection = getWindDirection(parseInt(response.wind.deg));
+
+            $("#current-humidity").html(`${humidity}%`);
+            $("#current-wind-speed").html(`${windSpeed} mph ${windDirection}`);
 
             // display UV Data
             getUVIndexData(response);
@@ -114,7 +172,6 @@ const displayCurrentWeather = (cityName) => {
 displayCurrentWeather(cityName);
 
 const displayTomorrowWeather = (response) => {
-    /* UV 8 days data  */
     const lon = response.coord.lon;
     const lat = response.coord.lat;
     const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${OW_API_KEY}`;
@@ -123,10 +180,14 @@ const displayTomorrowWeather = (response) => {
         url: UV_QUERY_URL,
         method: "GET"
     }).then(function (response) {
-        console.log(response);
+        // console.log(response);
         const tomorrowsData = response.daily[1];
+
         /* Display Date */
-        formatDate(tomorrowsData, "tomorrow");
+        var d = new Date(tomorrowsData.dt * 1000);
+        console.log(d)
+        var tomorrowDate = formatDate(d, "tomorrow");
+        $("#tomorrow-date").html(tomorrowDate);
 
         /* Display tomorrow's weather icon and description */
         displayIcon(tomorrowsData, "tomorrow");
@@ -141,46 +202,49 @@ const displayTomorrowWeather = (response) => {
         /* Display humidity and wind speed */
         const humidity = tomorrowsData.humidity;
         const windSpeed = tomorrowsData.wind_speed;
-        $("#tomorrow-humidity").html(`Humidity: <span class="font-weight-bold">${humidity}%</span>`);
-        $("#tomorrow-wind-speed").html(`Wind Speed: <span class="font-weight-bold">${windSpeed} MPH </span>`);
+        const windDirection = getWindDirection(parseInt(tomorrowsData.wind_deg));
+        $("#tomorrow-humidity").html(`${humidity}%`);
+        $("#tomorrow-wind-speed").html(`${windSpeed} mph ${windDirection}`);
 
         /* Display UVI */
         const uvIndex = parseInt(tomorrowsData.uvi);
         displayUVI(uvIndex, "tomorrow");
-        displayCards();
+        getCardData(response);
     })
 }
 
-/* create card elements for bootstrap accordion */
-const displayCards = () => {
-    for (let i = 0; i < 6; i++) {
-        $(".accordion").append(`
-            <div class="card">
-            <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button"
-                        data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                        aria-controls="collapseOne">
-                        Card-${i+1}
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
-                data-parent="#accordionExample">
-                <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                    richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor
-                    brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt
-                    aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
-                    Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
-                    ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
-                    farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them
-                    accusamus labore sustainable VHS.
-                </div>
-            </div>
-            </div>
-        `)
+const getCardData = (response) => {
+    var dataArray = [];
+
+    for (let i = 0; i < 5; i++) {
+        /* Get next Days */
+        var dailyObj = {};
+        dailyData = response.daily;
+
+        // Get date
+        const dt = dailyData[i].dt;
+        const d = new Date(dt * 1000);
+        dailyObj.date = formatDate(d, "tomorrow");
+        // Get main, icon, description
+        dailyObj.main = dailyData[i].weather[0].main;
+        const iconCode = dailyData[i].weather[0].icon;
+        dailyObj.icon_url = "http://openweathermap.org/img/wn/" + iconCode + ".png";
+        dailyObj.description = dailyData[i].weather[0].description;
+
+        // Get day and night temps
+        dailyObj.temp_day = dailyData[i].temp.day;
+        dailyObj.temp_night = dailyData[i].temp.night;
+
+        // Get humidity, wind, wind direction, and uvi
+        dailyObj.humidity = dailyData[i].humidity;
+        dailyObj.wind_speed = dailyData[i].wind_speed
+        const windDeg = dailyData[i].wind_deg;
+        dailyObj.wind_direction = getWindDirection(windDeg);
+        dailyObj.uvi = dailyData[i].uvi;
+        dataArray.push(dailyObj);
     }
+    console.log(dataArray);
+    displayCards(dataArray);
 }
 
 const getUVIndexData = (responseCurrent) => {
@@ -197,18 +261,34 @@ const getUVIndexData = (responseCurrent) => {
     })
 }
 
+// TODO: make this return just alert
 const displayUVI = (uvi, timeline) => {
     /* Determine uv risk and display results*/
     if (uvi < 3) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-success">Low</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-success">Low</span>`);
     } else if (uvi <= 5) {
-        $("#current-uv-index").html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-warning">Moderate</span>`);
+        $("#current-uv-index").html(`${uvi} <span class="badge badge-warning">Moderate</span>`);
     } else if (uvi <= 7) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">High</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-danger">High</span>`);
     } else if (uvi <= 10) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Very High</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-danger">Very High</span>`);
     } else if (uvi >= 11) {
-        $(`#${timeline}-uv-index`).html(`UV Index: <span class="font-weight-bold">${uvi}</span> <span class="badge badge-danger">Extreme</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-danger">Extreme</span>`);
+    }
+}
+
+const getUVIAlert = (uvi) => {
+    /* Determine uv risk and display results*/
+    if (uvi < 3) {
+        return `<span class="badge badge-success">Low</span>`
+    } else if (uvi <= 5) {
+        return `<span class="badge badge-warning">Moderate</span>`
+    } else if (uvi <= 7) {
+        return `<span class="badge badge-danger">High</span>`
+    } else if (uvi <= 10) {
+        return `<span class="badge badge-danger">Very High</span>`
+    } else if (uvi >= 11) {
+        return `<span class="badge badge-danger">Extreme</span>`
     }
 }
 
@@ -217,7 +297,7 @@ const displayIcon = (data, timeline) => {
     const iconCode = data.weather[0].icon;
     const main = data.weather[0].main;
     const description = data.weather[0].description;
-    const iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png"
+    const iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png";
     $(`#${timeline}-icon`).attr("src", iconURL);
     $(`#${timeline}-main`).html(`<span class="font-weight-bold">${main}</span>`);
     $(`#${timeline}-description`).html(description);
@@ -239,9 +319,8 @@ const displayTemperatures = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvi
 /*######## Additional function ########*/
 
 // Format Date function
-const formatDate = (data, timeline) => {
+const formatDate = (d, timeline) => {
     'use strict';
-    var d = new Date(data.dt * 1000);
     const months = [
         'January',
         'February',
@@ -296,6 +375,7 @@ const formatDate = (data, timeline) => {
     }
 
     // return formatted;
+    return formatted;
     $(`#${timeline}-date`).html(formatted);
 }
 
@@ -311,4 +391,48 @@ const kToF = (k) => {
 */
 const kToC = (k) => {
     return k - 273.15;
+}
+
+/* Determine wind degree */
+const getWindDirection = (degree) => {
+
+    // Round degree to the nearest tenth
+    var decimalDegree = degree / 10;
+    var roundDegree = Math.round(decimalDegree) * 10;
+
+    const directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW",
+        "W", "WNW", "NW", "NNW"];
+    if ((roundDegree >= 0 && roundDegree <= 10) || (roundDegree >= 350 && roundDegree <= 360)) {
+        return directions[0];
+    } else if (roundDegree >= 20 && roundDegree <= 30) {
+        return directions[1];
+    } else if (roundDegree >= 40 && roundDegree <= 50) {
+        return directions[2];
+    } else if (roundDegree >= 60 && roundDegree <= 70) {
+        return directions[3];
+    } else if (roundDegree >= 80 && roundDegree <= 100) {
+        return directions[4];
+    } else if (roundDegree >= 110 && roundDegree <= 120) {
+        return directions[5];
+    } else if (roundDegree >= 130 && roundDegree <= 140) {
+        return directions[6];
+    } else if (roundDegree >= 150 && roundDegree <= 160) {
+        return directions[7];
+    } else if (roundDegree >= 170 && roundDegree <= 190) {
+        return directions[8];
+    } else if (roundDegree >= 200 && roundDegree <= 210) {
+        return directions[9];
+    } else if (roundDegree >= 220 && roundDegree <= 230) {
+        return directions[10];
+    } else if (roundDegree >= 240 && roundDegree <= 250) {
+        return directions[11];
+    } else if (roundDegree >= 260 && roundDegree <= 280) {
+        return directions[12];
+    } else if (roundDegree >= 290 && roundDegree <= 300) {
+        return directions[13];
+    } else if (roundDegree >= 310 && roundDegree <= 320) {
+        return directions[14];
+    } else if (roundDegree >= 330 && roundDegree <= 340) {
+        return directions[15];
+    }
 }
