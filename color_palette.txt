@@ -17,15 +17,19 @@ change color every 1.2 hours
 or 1 hour and 12 minutes
 or 72
 
-7400B8 0:00 to 1:12
-6930C3 1:12 to 2:24
-5E60CE 2:24 to 3:36
-5390D9 3:36 to 4:48
-4EA8DE 4:48 to 6:00
-48BFE3 6:00 to 7:12
-56CFE1 7:12 to 8:24
+7400B8 0 - 3    (21 - 0)
+6930C3 
+5E60CE 3 - 6 -> (18 - 21)
+5390D9 
+4EA8DE 6 - 9 -> (15 - 18)
+48BFE3 
+56CFE1 9 - 12 -> (12 - 15)
 64DFDF 8:24 to 9:36
 72EFDD 9:36 to 10:48
 80FFDB 10:48 to 12:00
 
 So every 72 hours change color pallette
+
+nav-today
+nav-tomorrow
+nav-five-day

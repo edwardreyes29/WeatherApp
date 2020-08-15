@@ -74,3 +74,14 @@ displaying similar results as the current weather data.
 ## Search Demos
 ![search-demo-1](assets/screenshots/search-demo-1.png)
 ![search-demo-2](assets/screenshots/search-demo-2.png)
+
+## Changing Displays (UPDATE)
+### The current display changes depending on the the time of day a user logs in.
+### I doesn't change color dynamically in real time (will work on that maybe)
+![current-display](assets/screenshots/current-display.png)
+![color-palette](assets/screenshots/color-palette.png)
+
+## Tomorrow's design & Five day forecast display
+### For both tomorrow's weather and the 5 day forecast displays have fixed colors
+![tomorrows-display](assets/screenshots/tomorrows-display.png)
+![five-day-display](assets/screenshots/five-day-display.png)
