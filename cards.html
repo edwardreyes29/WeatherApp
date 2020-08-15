@@ -1,0 +1,34 @@
+<div class="card">
+    <div class="card-header" id="headingOne">
+        <h2 class="mb-0">
+            <div class="d-flex">
+                <button id="daily-date-${i+1}" class="btn btn-block text-left pl-0" type="button" data-toggle="collapse"
+                    data-target="#collapse-${i+1}" aria-expanded="true" aria-controls="collapse-${i+1}">
+                    Date
+                    <p id="daily-description-${i+1}" class="m-0 text-secondary" style="font-size:0.9rem;">Description</p>
+                </button>
+                <img id="daily-icon-${i+1}" src=""></img>
+                <div class="ml-2 mb-2 mt-3 text-right">
+                    <p id="daily-temp-day-${i+1}" class="m-0 degree-display" style="font-size: 0.9rem;">100</p>
+                    <p id="daily-temp-night-${i+1}" class="m-0 degree-display text-secondary" style="font-size: 0.9rem;">90</p>
+                </div>
+            </div>
+        </h2>
+    </div>
+    <div id="collapse-${i+1}" class="collapse" aria-labelledby="headine-${i+1}" data-parent="#accordionExample">
+        <div class="card-body">
+            <div class="row w-100">
+                <div class="col-6">
+                    <div class="text-secondary">Humidity:</div>
+                    <div class="text-secondary">Wind:</div>
+                    <div class="text-secondary">UV index:</div>
+                </div>
+                <div class="col-6">
+                    <div id="daily-humidity-${i+1}">0%</div>
+                    <div id="daily-wind-${i+1}">0 mph N</div>
+                    <div id="daily-uvi-${i+1}">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

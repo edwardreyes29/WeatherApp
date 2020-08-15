@@ -25,7 +25,9 @@ footer {
 }
 
 /** Styling for content*/
-
+/* #search-dropdown-history {
+    display: none;
+} */
 #square {
     width: 45px;
     height: 40px;
@@ -65,8 +67,8 @@ footer {
 /** Styling for side bar */
 #sidebar {
     transition: all 0.3s;
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 350px;
+    max-width: 350px;
     height: 100vh;
     position: fixed;
     top: 0;
@@ -76,7 +78,26 @@ footer {
 }
 
 #sidebar.active {
-    margin-left: -260px;
+    margin-left: -360px;
+}
+
+@media(max-width: 768px) {
+    /** Styling for side bar */
+    #sidebar {
+        transition: all 0.3s;
+        min-width: 250px;
+        max-width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        /* top layer */
+        z-index: 9999;
+    }
+
+    #sidebar.active {
+        margin-left: -260px;
+    }
 }
 
 /** TODO add styling to change background dynamically based on time of day **/
