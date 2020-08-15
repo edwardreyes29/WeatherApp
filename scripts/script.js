@@ -3,7 +3,7 @@
 /*######## HTML interactivity ########*/
 
 /* Displays the weather panes */
-const displayWeatherPane = (timeline) => {
+var displayWeatherPane = (timeline) => {
     $(`#${timeline}`).append(`
         <h2 class="city-name" class="w-100">Location</h2>
         <p id="${timeline}-date">Date</p>
@@ -53,8 +53,8 @@ displayWeatherPane("current");
 displayWeatherPane("tomorrow");
 
 /* create card elements for bootstrap accordion */
-const displayCards = (dataArray) => {
-    for (let i = 0; i < 5; i++) {
+var displayCards = (dataArray) => {
+    for (let i = 0; i < dataArray.length; i++) {
         $(".accordion").append(`
             <div class="card">
             <div class="card-header" id="headingOne">
@@ -99,6 +99,7 @@ const displayCards = (dataArray) => {
 // displayCards();
 
 
+
 /* Toggle side bar display */
 $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
@@ -110,6 +111,19 @@ $(document).ready(function () {
         $('.overlay').removeClass('active');
     });
 });
+
+$("#search-button").on("click", () => {
+    console.log("Hello")
+
+    console.log($("#dropdownHistory").val());
+    var searchResult = $("#dropdownHistory").val().trim();
+
+    if (searchResult.length === 0 || searchResult === null || searchResult === undefined) {
+
+    } else {
+        displayCurrentWeather(searchResult);
+    }
+})
 
 /*######## Open Weather API ########*/
 
@@ -124,7 +138,11 @@ var cityName;
 cityName = "Los Angeles";
 
 /* Current weather data */
-const displayCurrentWeather = (cityName) => {
+var displayCurrentWeather = (cityName) => {
+
+    // clear out forcast data
+    $("#accordionExample").empty()
+
     // Set Google Search url
     $("#web-results").attr("href", `http://www.google.com/search?q=${cityName}+weather`);
 
@@ -171,7 +189,7 @@ const displayCurrentWeather = (cityName) => {
 
 displayCurrentWeather(cityName);
 
-const displayTomorrowWeather = (response) => {
+var displayTomorrowWeather = (response) => {
     const lon = response.coord.lon;
     const lat = response.coord.lat;
     const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${OW_API_KEY}`;
@@ -214,6 +232,7 @@ const displayTomorrowWeather = (response) => {
 }
 
 const getCardData = (response) => {
+    console.log("getting card data");
     var dataArray = [];
 
     for (let i = 0; i < 5; i++) {
@@ -222,9 +241,10 @@ const getCardData = (response) => {
         dailyData = response.daily;
 
         // Get date
-        const dt = dailyData[i].dt;
+        const dt = dailyData[i+1].dt;
         const d = new Date(dt * 1000);
         dailyObj.date = formatDate(d, "tomorrow");
+
         // Get main, icon, description
         dailyObj.main = dailyData[i].weather[0].main;
         const iconCode = dailyData[i].weather[0].icon;
@@ -237,7 +257,7 @@ const getCardData = (response) => {
 
         // Get humidity, wind, wind direction, and uvi
         dailyObj.humidity = dailyData[i].humidity;
-        dailyObj.wind_speed = dailyData[i].wind_speed
+        dailyObj.wind_speed = dailyData[i+1].wind_speed
         const windDeg = dailyData[i].wind_deg;
         dailyObj.wind_direction = getWindDirection(windDeg);
         dailyObj.uvi = dailyData[i].uvi;
