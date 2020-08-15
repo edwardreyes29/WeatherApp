@@ -41,14 +41,14 @@ var displayWeatherPane = (timeline) => {
         <h2 class="city-name" class="w-100">Location</h2>
         <p id="${timeline}-date">Date</p>
         <div id="${timeline}-temp-container w-100" class="row">
-            <div class="col-9 bg-info d-flex p-0">
-                <div class="bg-success w-100 pl-3">
+            <div class="col-7 d-flex p-0">
+                <div class="w-100 pl-3">
                     <p id="${timeline}-min-max" class="align-self-center m-0">
                         <span id="${timeline}-min" class="fahr-display">min: 0</span>
                         <img src="assets/icons/dot.svg">
                         <span id="${timeline}-max" class="fahr-display">max: 0</span>
                     </p>
-                    <div class="bg-primary w-100">
+                    <div class="w-100">
                         <h3 id="${timeline}-temp" class="align-self-center m-0 fahr-display"
                             style="font-size:4rem;">0</h3>
                     </div>
@@ -57,21 +57,21 @@ var displayWeatherPane = (timeline) => {
                 </div>
 
             </div>
-            <div id="${timeline}-weather-container" class="col-3 bg-danger">
+            <div id="${timeline}-weather-container" class="col-5">
                 <div>
                     <img src="" id="${timeline}-icon" class="img-fluid">
                     <p id="${timeline}-main" class="m-0"></p>
                     <p id="${timeline}-description" class="m-0" style="font-size: x-small"></p>
                 </div>
             </div>
-            <div id="${timeline}-info-container" class="pl-3 bg-info w-100">
+            <div id="${timeline}-info-container" class="pl-3 w-100">
                 <div class="row w-100">
-                    <div class="col-6">
-                        <div class="text-secondary">Humidity:</div>
-                        <div class="text-secondary">Wind:</div>
-                        <div class="text-secondary">UV index:</div>
+                    <div class="col-7">
+                        <div>Humidity:</div>
+                        <div>Wind:</div>
+                        <div>UV index:</div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-5">
                         <div id="${timeline}-humidity">0%</div>
                         <div id="${timeline}-wind-speed">0 mph N</div>
                         <div id="${timeline}-uv-index">0</div>
@@ -141,7 +141,6 @@ $('#dismiss').on('click', function () {
     $('#sidebar').addClass('active');
     $('.overlay').removeClass('active');
 });
-
 /*######## Open Weather API ########*/
 
 /* Current weather data */

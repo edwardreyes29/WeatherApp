@@ -14,9 +14,9 @@
     <!-- Sidebar -->
     <div id="sidebar" class="bg-light active">
         <div class="sidebar-header bg-primary pl-3">
-            <div>User Logo here</div>
+            <div class="text-light" style="font-size:2rem;">Weather App</div>
             <div class="d-flex flex-row justify-content-between">
-                <div class="align-self-center text-light">User Name here</div>
+                <div class="align-self-center text-light">Dashboard</div>
                 <button id="dismiss" class="btn" type="button"><img src="assets/icons/list-white.svg"></button>
             </div>
 
@@ -26,10 +26,10 @@
     <div class="overlay"></div>
 
     <!-- Page Content -->
-    <div id="main-container" class="bg-warning">
-        <header role="banner" id="search-bar-container" class="bg-dark h-100">
+    <div id="main-container" class="text-light">
+        <header role="banner" id="search-bar-container" class="h-100">
             <nav role="navigation">
-                <div class="input-group mb-2 dropdown bg-light" id="search-bar">
+                <div class="input-group mb-3 dropdown bg-light" id="search-bar">
                     <div class="input-group-prepend">
                         <button id="sidebarCollapse" class="btn" type="button"><img
                                 src="assets/icons/list.svg"></button>
@@ -47,22 +47,22 @@
                 </div>
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link bg-dark text-light active" id="current-tab" data-toggle="tab" href="#current"
+                        <a id="nav-today" class="nav-link text-light active" id="current-tab" style="background-color: #7400B8;" data-toggle="tab" href="#current"
                             role="tab" aria-controls="current" aria-selected="true">Today</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link bg-dark text-secondary" id="tomorrow-tab" data-toggle="tab" href="#tomorrow"
+                        <a id="nav-tomorrow" class="nav-link text-light" id="tomorrow-tab" style="background-color: #7400B8;" data-toggle="tab" href="#tomorrow"
                             role="tab" aria-controls="tomorrow" aria-selected="false">Tomorrow</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link bg-dark text-secondary" id="days-tab" data-toggle="tab" href="#days"
+                        <a id="nav-five-day" class="nav-link text-light" id="days-tab" style="background-color: #7400B8;" data-toggle="tab" href="#days"
                             role="tab" aria-controls="days" aria-selected="false">5 Days</a>
                     </li>
                 </ul>
             </nav>
         </header>
         <!-- Weather Panes -->
-        <main role="main" class="container">
+        <main role="main" class="container mt-2">
             <div class="tab-content" id="myTabContent">
                 <!-- Current Weather -->
                 <div class="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab" ;>
