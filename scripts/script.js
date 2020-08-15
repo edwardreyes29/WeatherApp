@@ -1,4 +1,38 @@
 // TODO: add styling to change background dynamically based on time of day
+var searchedLocations = [];
+
+/* render search history */
+const renderSearchHistory = () => {
+    for (let i = 0; i < searchedLocations.length; i++) {
+        $(`#search-dropdown-history`).append(`
+            <button class="dropdown-item btn" type="button" data-location="${searchedLocations[i]}">${searchedLocations[i]}</button>
+        `);
+    }
+}
+
+/* initialize searchedLocations with local storage data */
+const init = () => {
+    var storedLocations = JSON.parse(localStorage.getItem("searchedLocations"));
+    if (storedLocations !== null) {
+        for (var i = 0; i < storedLocations.length; i++) {
+            searchedLocations.push(storedLocations[i]);
+        }
+    }
+    // Render todos to the DOM
+    // renderTodos();
+    if (searchedLocations.length > 0) {
+        renderSearchHistory();
+    }
+}
+init();
+
+
+/* store searched locations to local storage */
+var storeLocations = () => {
+    console.log("in store")
+    localStorage.setItem("searchedLocations", JSON.stringify(searchedLocations));
+}
+
 
 /*######## HTML interactivity ########*/
 /* Displays the weather panes */
@@ -60,18 +94,18 @@ var displayCards = () => {
                 <div class="d-flex">
                 <button class="btn btn-block text-left pl-0" type="button"
                     data-toggle="collapse" data-target="#collapse-${i + 1}" aria-expanded="true"
-                    aria-controls="collapse-${i + 1}"><span id="daily-date-${i+1}">Date</span>
-                    <p id="daily-description-${i+1}" class="m-0 text-secondary" style="font-size:0.9rem;">Description</p>
+                    aria-controls="collapse-${i + 1}"><span id="daily-date-${i + 1}">Date</span>
+                    <p id="daily-description-${i + 1}" class="m-0 text-secondary" style="font-size:0.9rem;">Description</p>
                 </button>
-                    <img id="daily-icon-${i+1}" src=""></img>
+                    <img id="daily-icon-${i + 1}" src=""></img>
                     <div class="ml-2 mb-2 mt-3 text-right">
-                        <p id="daily-temp-day-${i+1}" class="m-0 degree-display" style="font-size: 0.9rem;">100</p>
-                        <p id="daily-temp-night-${i+1}" class="m-0 degree-display text-secondary" style="font-size: 0.9rem;">90</p>
+                        <p id="daily-temp-day-${i + 1}" class="m-0 degree-display" style="font-size: 0.9rem;">100</p>
+                        <p id="daily-temp-night-${i + 1}" class="m-0 degree-display text-secondary" style="font-size: 0.9rem;">90</p>
                     </div>
                 </div>
             </h2>
         </div>
-        <div id="collapse-${i+1}" class="collapse" aria-labelledby="headine-${i+1}" data-parent="#accordionExample">
+        <div id="collapse-${i + 1}" class="collapse" aria-labelledby="headine-${i + 1}" data-parent="#accordionExample">
             <div class="card-body">
                 <div class="row w-100">
                     <div class="col-6">
@@ -80,9 +114,9 @@ var displayCards = () => {
                         <div class="text-secondary">UV index:</div>
                     </div>
                     <div class="col-6">
-                        <div id="daily-humidity-${i+1}">0%</div>
-                        <div id="daily-wind-${i+1}">0 mph N</div>
-                        <div id="daily-uvi-${i+1}">0</div>
+                        <div id="daily-humidity-${i + 1}">0%</div>
+                        <div id="daily-wind-${i + 1}">0 mph N</div>
+                        <div id="daily-uvi-${i + 1}">0</div>
                     </div>
                 </div>
             </div>
@@ -118,6 +152,7 @@ var cityName;
 
 /* Search button to save search history*/
 $("#search-button").on("click", () => {
+    event.preventDefault();
     console.log($("#dropdownHistory").val());
     var cityName = $("#dropdownHistory").val().trim();
 
@@ -127,9 +162,13 @@ $("#search-button").on("click", () => {
         displayCurrentWeather(cityName);
         $(`#search-dropdown-history`).append(`
             <button class="dropdown-item btn" type="button" data-location="${cityName}">${cityName}</button>
-        `)
+        `);
+        searchedLocations.push(cityName);
+        console.log(searchedLocations);
+        // localStorage.setItem("searchedLocations", cityName);
+        storeLocations();
     }
-})
+});
 
 /* Current weather data */
 var displayCurrentWeather = (cityName) => {
@@ -222,35 +261,35 @@ var displayTomorrowWeather = (response) => {
 }
 
 /* Push data to cards*/
-const getCardData = (response) => { 
+const getCardData = (response) => {
     for (let i = 0; i < 5; i++) {
         /* Get next Days */
         var dailyObj = {};
         dailyData = response.daily;
 
         // Get date
-        const dt = dailyData[i+1].dt;
+        const dt = dailyData[i + 1].dt;
         const d = new Date(dt * 1000);
-        $(`#daily-date-${i+1}`).html(formatDate(d, "tomorrow"))
+        $(`#daily-date-${i + 1}`).html(formatDate(d, "tomorrow"))
 
         // Get main, icon, description
         const iconCode = dailyData[i].weather[0].icon;
-        $(`#daily-icon-${i+1}`).attr("src", "http://openweathermap.org/img/wn/" + iconCode + ".png");
-        descriptionCapitalized = capitalize(dailyData[i].weather[0].description) 
-        $(`#daily-description-${i+1}`).html(descriptionCapitalized);
+        $(`#daily-icon-${i + 1}`).attr("src", "http://openweathermap.org/img/wn/" + iconCode + ".png");
+        descriptionCapitalized = capitalize(dailyData[i].weather[0].description)
+        $(`#daily-description-${i + 1}`).html(descriptionCapitalized);
 
         // Get day and night temps
         const dayTempConversion = parseInt(kToF(parseFloat(dailyData[i].temp.day)));
         const nightTempConversion = parseInt(kToF(parseFloat(dailyData[i].temp.night)));
-        $(`#daily-temp-day-${i+1}`).html(dayTempConversion).attr("data-temp", dailyData[i].temp.day);
-        $(`#daily-temp-night-${i+1}`).html(nightTempConversion).attr("data-temp", dailyData[i].temp.night);
+        $(`#daily-temp-day-${i + 1}`).html(dayTempConversion).attr("data-temp", dailyData[i].temp.day);
+        $(`#daily-temp-night-${i + 1}`).html(nightTempConversion).attr("data-temp", dailyData[i].temp.night);
 
         // Get humidity, wind, wind direction, and uvi
-        $(`#daily-humidity-${i+1}`).html(`${dailyData[i].humidity}%`);
+        $(`#daily-humidity-${i + 1}`).html(`${dailyData[i].humidity}%`);
         const windDeg = dailyData[i].wind_deg;
-        $(`#daily-wind-${i+1}`).html(`${dailyData[i+1].wind_speed} mph ${getWindDirection(windDeg)}`)
+        $(`#daily-wind-${i + 1}`).html(`${dailyData[i + 1].wind_speed} mph ${getWindDirection(windDeg)}`)
         var uvi = parseInt(dailyData[i].uvi);
-        $(`#daily-uvi-${i+1}`).html(`${uvi} ${getUVIAlert(uvi)}`);
+        $(`#daily-uvi-${i + 1}`).html(`${uvi} ${getUVIAlert(uvi)}`);
     }
 }
 
@@ -322,6 +361,13 @@ const displayTemperatures = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvi
     $(`#${timeline}-max`).html(`max: ${tempFahrMax.toFixed(1)}`).attr("data-temp", tempKelvinMax);
     $(`#${timeline}-feels`).html(`Feels like ${tempFahrFeels.toFixed(1)}`).attr("data-temp", tempKelvinFeels);
 }
+
+/* On click function to display */
+$(document).on("click", ".dropdown-item", function(event) {
+    console.log($(this).data("location"));
+    const clickedLocation = $(this).data("location");
+    displayCurrentWeather(clickedLocation);
+})
 
 /*######## Additional function ########*/
 
