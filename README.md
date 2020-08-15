@@ -1,46 +1,76 @@
-# 06 Server-Side APIs: Weather Dashboard
 
-Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+# Weather App 
 
-Use the [OpenWeather API](https://openweathermap.org/api) to retrieve weather data for cities. The documentation includes a section called "How to start" that will provide basic setup and usage instructions. Use `localStorage` to store any persistent data.
+## AUTHOR
+
+Edward Reyes
+
+## CONCEPT
+This app allows you to search a location and view weather data such has 
+temperature, cloud conditions, humidity, wind speeds, wind directions, 
+and UV index. The app will also store you previous searched locations,
+allowing you to search adn see weather data on that location when clicked
+again. The app also display weather information from a 5 day forecast,
+displaying similar results as the current weather data.
 
 ## User Story
+  * AS A traveler
+  * I WANT to see the weather outlook for multiple cities
+  * SO THAT I can plan a trip accordingly
 
-```
-AS A traveler
-I WANT to see the weather outlook for multiple cities
-SO THAT I can plan a trip accordingly
-```
+## Site information Display
+  * Display Temperature and weather conditions
+  * Display wind speeds, wind directions, UV index, and humidity.
 
-## Acceptance Criteria
+## Process
+  ### Front End Development
+  * Used HTML, CSS, and Booststrap
+  * Used Bootstrap primarily for row/col alignment, centering, spacing, and text color.
+  * Used css to tweak spacing, background color, spacing between main-content and footer, and more.
+    
+  ### Back End Development
+  * I used the Open Weather Api as required by this assignment. I used the Current Weather API,
+    5-day forecast API, and the current UV Index API in order to get the required data.
+  * I used both vanilla javascript, ES6 syntax, jQuery, and Ajax calls to both work with
+    the API and display HTML elements, information, button interactions dynamically.
 
-```
-GIVEN a weather dashboard with form inputs
-WHEN I search for a city
-THEN I am presented with current and future conditions for that city and that city is added to the search history
-WHEN I view current weather conditions for that city
-THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-WHEN I view the UV index
-THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
-WHEN I view future weather conditions for that city
-THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, and the humidity
-WHEN I click on a city in the search history
-THEN I am again presented with current and future conditions for that city
-WHEN I open the weather dashboard
-THEN I am presented with the last searched city forecast
-```
+### Technologies used:  
+  HTML, CSS, Bootstrap, JavaScript, OpenWeather API, jQuery
 
-The following image demonstrates the application functionality:
+## CHALLENGES
+  * Mostly working with the layout. This time I did a mobile-first approach which  I wasn't used to.
+  * Also keeping the script.js file organzied and not too crowded, while also working one keeping 
+    the code overall non-repetitive or D.R.Y.
 
-![weather dashboard demo](./Assets/06-server-side-apis-homework-demo.png)
+## LINK TO DEPLOYED APPLICATION / GITHUB
 
-## Review
+[GitHub Pages](https://edwardreyes29.github.io/WeatherApp/)
 
-You are required to submit the following for review:
+[GitHub](https://github.com/edwardreyes29/WeatherApp)
 
-* The URL of the deployed application.
+## Screen shots
 
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+### Final result
+![Final-result](assets/screenshots/desktop-1.png)
 
-- - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
+## Prototype stages
+### Testing retrieving icons from the API
+![prototype-1](assets/screenshots/prototype-1.png)
+
+## Testing mobile look of the app. 
+### Used bg-colors to visually see spacing of elements
+![prototype-2](assets/screenshots/prototype-2.png)
+
+## Final prototype
+![prototype-3](assets/screenshots/prototype-3.png)
+
+
+## Tomorrow's Weather
+![desktop-2](assets/screenshots/desktop-2.png)
+
+## 5 day forecast
+![5-day-forecast](assets/screenshots/5-day-forcast-mobile.png)
+
+## Search Demos
+![search-demo-1](assets/screenshots/search-demo-1.png)
+![search-demo-2](assets/screenshots/search-demo-2.png)
