@@ -1,5 +1,5 @@
 // TODO: add styling to change background dynamically based on time of day
-var searchedLocations = [];
+var searchedLocations = JSON.parse(localStorage.getItem("searchedLocations")) || [];
 
 /* render search history */
 const renderSearchHistory = () => {
@@ -9,30 +9,18 @@ const renderSearchHistory = () => {
         `);
     }
 }
-
-/* initialize searchedLocations with local storage data */
-const init = () => {
-    var storedLocations = JSON.parse(localStorage.getItem("searchedLocations"));
-    if (storedLocations !== null) {
-        for (var i = 0; i < storedLocations.length; i++) {
-            searchedLocations.push(storedLocations[i]);
-        }
-    }
-    // Render todos to the DOM
-    // renderTodos();
-    if (searchedLocations.length > 0) {
-        renderSearchHistory();
-    }
+if (searchedLocations.length > 0) {
+    renderSearchHistory();
 }
-init();
 
 
 /* store searched locations to local storage */
 var storeLocations = () => {
-    console.log("in store")
     localStorage.setItem("searchedLocations", JSON.stringify(searchedLocations));
 }
 
+// Set default city
+var cityName;
 
 /*######## HTML interactivity ########*/
 /* Displays the weather panes */
@@ -84,9 +72,7 @@ var displayWeatherPane = (timeline) => {
 
 /* create card elements for bootstrap accordion */
 var displayCards = () => {
-    console.log("display cards")
     for (let i = 0; i < 5; i++) {
-        console.log("inside")
         $(".accordion").append(`
         <div class="card">
         <div class="card-header" id="headingOne">
@@ -146,28 +132,31 @@ $('#dismiss').on('click', function () {
 /* Current weather data */
 const OW_API_KEY = "de36e36780976652d3e84a5502633fce";
 const NUMBER_OF_DAYS = 5;
-var cityName;
 
+
+const searchCity = () => {
+    const input = $("#dropdownHistory").val().trim();
+    if (input.length === 0) {
+        return;
+    } else {
+        /* Ensures that city name will have same letter case */
+        const lowerCityName = input.toLowerCase();
+        cityName = titleCase(lowerCityName);
+        displayCurrentWeather(cityName);      
+    }
+}
 
 /* Search button to save search history*/
-$("#search-button").on("click", () => {
+$("#search-button").on("click", (event) => {
     event.preventDefault();
-    console.log($("#dropdownHistory").val());
-    var cityName = $("#dropdownHistory").val().trim();
-
-    if (cityName.length === 0 || cityName === null || cityName === undefined) {
-
-    } else {
-        displayCurrentWeather(cityName);
-        $(`#search-dropdown-history`).append(`
-            <button class="dropdown-item btn" type="button" data-location="${cityName}">${cityName}</button>
-        `);
-        searchedLocations.push(cityName);
-        console.log(searchedLocations);
-        // localStorage.setItem("searchedLocations", cityName);
-        storeLocations();
-    }
+    searchCity();
 });
+
+/* When user presses enter */
+$("#search-form").on("submit", (event) => {
+    event.preventDefault();
+    searchCity();
+})
 
 /* Current weather data */
 var displayCurrentWeather = (cityName) => {
@@ -180,6 +169,15 @@ var displayCurrentWeather = (cityName) => {
         method: "GET"
     })
         .then(function (response) {
+            /* Checks if this city is already in the searchedLocations array */
+            if(!searchedLocations.includes(cityName)) {
+                $(`#search-dropdown-history`).append(`
+                    <button class="dropdown-item btn" type="button" data-location="${cityName}">${cityName}</button>
+                `);
+                searchedLocations.push(cityName);
+                storeLocations();
+            } 
+
             /* Display location data */
             var countryCode = response.sys.country;
             $(".city-name").html(cityName + ', ' + countryCode);
@@ -214,8 +212,8 @@ var displayCurrentWeather = (cityName) => {
             displayTomorrowWeather(response);
         });
 }
-
-displayCurrentWeather("Los Angeles"); // Default display
+cityName = "Los Angeles";
+displayCurrentWeather(cityName); // Default display
 
 var displayTomorrowWeather = (response) => {
     const lon = response.coord.lon;
@@ -231,7 +229,6 @@ var displayTomorrowWeather = (response) => {
 
         /* Display Date */
         var d = new Date(tomorrowsData.dt * 1000);
-        console.log(d)
         var tomorrowDate = formatDate(d, "tomorrow");
         $("#tomorrow-date").html(tomorrowDate);
 
@@ -263,7 +260,6 @@ var displayTomorrowWeather = (response) => {
 const getCardData = (response) => {
     for (let i = 0; i < 5; i++) {
         /* Get next Days */
-        var dailyObj = {};
         dailyData = response.daily;
 
         // Get date
@@ -493,4 +489,11 @@ const getWindDirection = (degree) => {
 const capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+/* Title Case function */
+function titleCase(str) {
+    return str.toLowerCase().split(' ').map(function(word) {
+        return (word.charAt(0).toUpperCase() + word.slice(1));
+    }).join(' ');
 }

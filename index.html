@@ -30,33 +30,39 @@
         <header role="banner" id="search-bar-container" class="h-100">
             <nav role="navigation">
                 <div class="input-group mb-3 dropdown bg-light" id="search-bar">
-                    <div class="input-group-prepend">
-                        <button id="sidebarCollapse" class="btn" type="button"><img
-                                src="assets/icons/list.svg"></button>
+
+                    <form action="submit" id="search-form" class="d-flex justify-content-between w-100" data-toggle="dropdown">
+                        <div class="input-group-prepend">
+                            <button id="sidebarCollapse" class="btn" type="button"><img
+                                    src="assets/icons/list.svg"></button>
+                        </div>
+                        <input type="text" class="form-control border-0 dropdown-toggle" placeholder="Search places"
+                            aria-label="" aria-describedby="basic-addon1" id="dropdownHistory" 
+                            aria-haspopup="true" aria-expanded="false">
+                        <div class="input-group-append">
+                            <button id="search-button" class="btn" type="button"><img
+                                    src="assets/icons/search.svg"></button>
+                        </div>
+                    </form>
+                    <div id="search-dropdown-history" class="dropdown-menu w-100 m-0">
                     </div>
-                    <input type="text" class="form-control border-0 dropdown-toggle" placeholder="Search places"
-                        aria-label="" aria-describedby="basic-addon1" id="dropdownHistory" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                    <div id="search-dropdown-history" class="dropdown-menu w-100 m-0" aria-labelledby="dropdownHistory">
-                        
-                    </div>
-                    <div class="input-group-append">
-                        <button id="search-button" class="btn" type="button"><img
-                                src="assets/icons/search.svg"></button>
-                    </div>
+
                 </div>
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a id="nav-today" class="nav-link text-light active" id="current-tab" style="background-color: #7400B8;" data-toggle="tab" href="#current"
-                            role="tab" aria-controls="current" aria-selected="true">Today</a>
+                        <a id="nav-today" class="nav-link text-light active" id="current-tab"
+                            style="background-color: #7400B8;" data-toggle="tab" href="#current" role="tab"
+                            aria-controls="current" aria-selected="true">Today</a>
                     </li>
                     <li class="nav-item">
-                        <a id="nav-tomorrow" class="nav-link text-light" id="tomorrow-tab" style="background-color: #7400B8;" data-toggle="tab" href="#tomorrow"
-                            role="tab" aria-controls="tomorrow" aria-selected="false">Tomorrow</a>
+                        <a id="nav-tomorrow" class="nav-link text-light" id="tomorrow-tab"
+                            style="background-color: #7400B8;" data-toggle="tab" href="#tomorrow" role="tab"
+                            aria-controls="tomorrow" aria-selected="false">Tomorrow</a>
                     </li>
                     <li class="nav-item">
-                        <a id="nav-five-day" class="nav-link text-light" id="days-tab" style="background-color: #7400B8;" data-toggle="tab" href="#days"
-                            role="tab" aria-controls="days" aria-selected="false">5 Days</a>
+                        <a id="nav-five-day" class="nav-link text-light" id="days-tab"
+                            style="background-color: #7400B8;" data-toggle="tab" href="#days" role="tab"
+                            aria-controls="days" aria-selected="false">5 Days</a>
                     </li>
                 </ul>
             </nav>
@@ -65,7 +71,8 @@
         <main role="main" class="container mt-2">
             <div class="tab-content" id="myTabContent">
                 <!-- Current Weather -->
-                <div class="tab-pane fade show active text-light" id="current" role="tabpanel" aria-labelledby="current-tab" ;>
+                <div class="tab-pane fade show active text-light" id="current" role="tabpanel"
+                    aria-labelledby="current-tab" ;>
                 </div>
                 <!-- Tomorrow's Weather -->
                 <div class="tab-pane fad text-light" id="tomorrow" role="tabpanel" aria-labelledby="tomorrow-tab">
@@ -117,34 +124,34 @@
         /* Change the current weather display based on the hour of the day when user opens the app. */
         var date = new Date();
         var hour = date.getHours();
-        
+
         var headerColor;
         var bodyColor;
         if (hour >= 0 && hour < 3) {
             headerColor = "#7400b8";
             bodyColor = "#6930c3";
-        } else if (hour >= 3 &&  hour < 6) {
+        } else if (hour >= 3 && hour < 6) {
             headerColor = "#6930c3";
             bodyColor = "#5e60ce";
-        } else if (hour >= 6 &&  hour < 9) {
+        } else if (hour >= 6 && hour < 9) {
             headerColor = "#5e60ce";
             bodyColor = "#5390d9";
-        } else if (hour >= 9 &&  hour < 12) { 
+        } else if (hour >= 9 && hour < 12) {
             headerColor = "#5390d9";
             bodyColor = "#4ea8de";
-        } else if (hour >= 12 &&  hour < 15) {
+        } else if (hour >= 12 && hour < 15) {
             headerColor = "#4ea8de";
             bodyColor = "#48bfe3";
-        }  else if (hour >= 15 &&  hour < 18) {
+        } else if (hour >= 15 && hour < 18) {
             headerColor = "#5390d9";
             bodyColor = "#4ea8de";
-        } else if (hour >= 15 &&  hour < 18) {
+        } else if (hour >= 15 && hour < 18) {
             headerColor = "#5e60ce";
             bodyColor = "#5390d9";
-        } else if (hour >= 18 &&  hour < 21) {
+        } else if (hour >= 18 && hour < 21) {
             headerColor = "#6930c3";
             bodyColor = "#5e60ce";
-        } else if (hour >= 21 &&  hour < 24) {
+        } else if (hour >= 21 && hour < 24) {
             headerColor = "#7400b8";
             bodyColor = "#6930c3";
         }
@@ -176,10 +183,8 @@
             changeDisplayColors(fiveDayBodyColor, fiveDayHeaderColor);
         })
 
-        
+
     </script>
 </body>
 
 </html>
-
-
