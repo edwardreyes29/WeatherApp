@@ -30,23 +30,23 @@
         <header role="banner" id="search-bar-container" class="h-100">
             <nav role="navigation">
                 <div class="input-group mb-3 dropdown bg-light" id="search-bar">
-
-                    <form action="submit" id="search-form" class="d-flex justify-content-between w-100" data-toggle="dropdown">
+                    <div class="d-flex justify-content-between w-100">
                         <div class="input-group-prepend">
                             <button id="sidebarCollapse" class="btn" type="button"><img
                                     src="assets/icons/list.svg"></button>
                         </div>
-                        <input type="text" class="form-control border-0 dropdown-toggle" placeholder="Search places"
-                            aria-label="" aria-describedby="basic-addon1" id="dropdownHistory" 
-                            aria-haspopup="true" aria-expanded="false">
+                        <form action="submit" id="search-form" class="w-100" data-toggle="dropdown">
+                            <input type="text" class="form-control border-0 dropdown-toggle" placeholder="Search places"
+                                aria-label="" aria-describedby="basic-addon1" id="dropdownHistory" aria-haspopup="true"
+                                aria-expanded="false">
+                        </form>
+                        <div id="search-dropdown-history" class="dropdown-menu w-100 m-0">
+                        </div>
                         <div class="input-group-append">
                             <button id="search-button" class="btn" type="button"><img
                                     src="assets/icons/search.svg"></button>
                         </div>
-                    </form>
-                    <div id="search-dropdown-history" class="dropdown-menu w-100 m-0">
                     </div>
-
                 </div>
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
