@@ -1,7 +1,6 @@
-// TODO: add styling to change background dynamically based on time of day
 var searchedLocations = JSON.parse(localStorage.getItem("searchedLocations")) || [];
 
-/* render search history */
+/* Render search history */
 const renderSearchHistory = () => {
     for (let i = 0; i < searchedLocations.length; i++) {
         $(`#search-dropdown-history`).append(`
@@ -13,14 +12,10 @@ if (searchedLocations.length > 0) {
     renderSearchHistory();
 }
 
-
-/* store searched locations to local storage */
+/* Store searched locations to local storage */
 var storeLocations = () => {
     localStorage.setItem("searchedLocations", JSON.stringify(searchedLocations));
 }
-
-// Set default city
-var cityName;
 
 /*######## HTML interactivity ########*/
 /* Displays the weather panes */
@@ -85,8 +80,8 @@ var displayCards = () => {
                 </button>
                     <img id="daily-icon-${i + 1}" src=""></img>
                     <div class="ml-2 mb-2 mt-3 text-right">
-                        <p id="daily-temp-day-${i + 1}" class="m-0 degree-display" style="font-size: 0.9rem;">100</p>
-                        <p id="daily-temp-night-${i + 1}" class="m-0 degree-display text-secondary" style="font-size: 0.9rem;">90</p>
+                        <p id="daily-day-${i + 1}-temp" class="m-0 degree-display" style="font-size: 0.9rem;">100</p>
+                        <p id="daily-night-${i + 1}-temp" class="m-0 degree-display text-secondary" style="font-size: 0.9rem;">90</p>
                     </div>
                 </div>
             </h2>
@@ -142,7 +137,7 @@ const searchCity = () => {
         /* Ensures that city name will have same letter case */
         const lowerCityName = input.toLowerCase();
         cityName = titleCase(lowerCityName);
-        displayCurrentWeather(cityName);      
+        getCurrentWeather(cityName);      
     }
 }
 
@@ -159,7 +154,7 @@ $("#search-form").on("submit", (event) => {
 })
 
 /* Current weather data */
-var displayCurrentWeather = (cityName) => {
+var getCurrentWeather = (cityName) => {
     // Set Google Search url
     $("#web-results").attr("href", `http://www.google.com/search?q=${cityName}+weather`);
 
@@ -171,6 +166,7 @@ var displayCurrentWeather = (cityName) => {
         .then(function (response) {
             /* Checks if this city is already in the searchedLocations array */
             if(!searchedLocations.includes(cityName)) {
+                /* If city does not exist, display in dropdown and store in local storage. */
                 $(`#search-dropdown-history`).append(`
                     <button class="dropdown-item btn" type="button" data-location="${cityName}">${cityName}</button>
                 `);
@@ -190,32 +186,26 @@ var displayCurrentWeather = (cityName) => {
             /* Display weather icon and description */
             displayIcon(response, "current");
 
-            /* Display Temperatures in fahr*/
+            /* Get Weather data*/
             const tempKelvin = parseFloat(response.main.temp);
             const tempKelvinMax = parseFloat(response.main.temp_max);
             const tempKelvinMin = parseFloat(response.main.temp_min);
             const tempKelvinFeels = parseFloat(response.main.feels_like);
-            displayTemperatures(tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, "current");
-
-            /* Display humidity and wind speed */
             const humidity = response.main.humidity;
             const windSpeed = response.wind.speed;
             const windDirection = getWindDirection(parseInt(response.wind.deg));
+            displayWeather(tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, humidity, windSpeed, windDirection,"current");
 
-            $("#current-humidity").html(`${humidity}%`);
-            $("#current-wind-speed").html(`${windSpeed} mph ${windDirection}`);
-
-            // display UV Data
+            // Get UV Index
             getUVIndexData(response);
 
             // Display Tomorrow's weather
-            displayTomorrowWeather(response);
+            getTomorrowWeather(response);
         });
 }
-cityName = "Los Angeles";
-displayCurrentWeather(cityName); // Default display
+getCurrentWeather("Los Angeles"); // Default display
 
-var displayTomorrowWeather = (response) => {
+var getTomorrowWeather = (response) => {
     const lon = response.coord.lon;
     const lat = response.coord.lat;
     const UV_QUERY_URL = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&appid=${OW_API_KEY}`;
@@ -240,18 +230,16 @@ var displayTomorrowWeather = (response) => {
         const tempKelvinMax = parseFloat(tomorrowsData.temp.max);
         const tempKelvinMin = parseFloat(tomorrowsData.temp.min);
         const tempKelvinFeels = parseFloat(tomorrowsData.feels_like.day);
-        displayTemperatures(tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, "tomorrow");
-
-        /* Display humidity and wind speed */
         const humidity = tomorrowsData.humidity;
         const windSpeed = tomorrowsData.wind_speed;
         const windDirection = getWindDirection(parseInt(tomorrowsData.wind_deg));
-        $("#tomorrow-humidity").html(`${humidity}%`);
-        $("#tomorrow-wind-speed").html(`${windSpeed} mph ${windDirection}`);
+        displayWeather(tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, humidity, windSpeed, windDirection, "tomorrow");
 
         /* Display UVI */
         const uvIndex = parseInt(tomorrowsData.uvi);
         displayUVI(uvIndex, "tomorrow");
+
+        /* Get data for the 5-day forecast */
         getCardData(response);
     })
 }
@@ -276,8 +264,8 @@ const getCardData = (response) => {
         // Get day and night temps
         const dayTempConversion = parseInt(kToF(parseFloat(dailyData[i].temp.day)));
         const nightTempConversion = parseInt(kToF(parseFloat(dailyData[i].temp.night)));
-        $(`#daily-temp-day-${i + 1}`).html(dayTempConversion).attr("data-temp", dailyData[i].temp.day);
-        $(`#daily-temp-night-${i + 1}`).html(nightTempConversion).attr("data-temp", dailyData[i].temp.night);
+        $(`#daily-day-${i + 1}-temp`).html(dayTempConversion).attr("data-temp", dailyData[i].temp.day);
+        $(`#daily-night-${i + 1}-temp`).html(nightTempConversion).attr("data-temp", dailyData[i].temp.night);
 
         // Get humidity, wind, wind direction, and uvi
         $(`#daily-humidity-${i + 1}`).html(`${dailyData[i].humidity}%`);
@@ -306,15 +294,15 @@ const getUVIndexData = (responseCurrent) => {
 const displayUVI = (uvi, timeline) => {
     /* Determine uv risk and display results*/
     if (uvi < 3) {
-        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-success">Low</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} ${getUVIAlert(uvi)}`);
     } else if (uvi <= 5) {
-        $("#current-uv-index").html(`${uvi} <span class="badge badge-warning">Moderate</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} ${getUVIAlert(uvi)}`);
     } else if (uvi <= 7) {
-        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-danger">High</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} ${getUVIAlert(uvi)}`);
     } else if (uvi <= 10) {
-        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-danger">Very High</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} ${getUVIAlert(uvi)}`);
     } else if (uvi >= 11) {
-        $(`#${timeline}-uv-index`).html(`${uvi} <span class="badge badge-danger">Extreme</span>`);
+        $(`#${timeline}-uv-index`).html(`${uvi} ${getUVIAlert(uvi)}`);
     }
 }
 
@@ -344,7 +332,7 @@ const displayIcon = (data, timeline) => {
     $(`#${timeline}-description`).html(description);
 }
 
-const displayTemperatures = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, timeline) => {
+const displayWeather = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, humidity, windSpeed, windDirection, timeline) => {
     // Convert from kelvin to fahr
     const tempFahr = kToF(tempKelvin);
     const tempFahrMax = kToF(tempKelvinMax);
@@ -355,14 +343,20 @@ const displayTemperatures = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvi
     $(`#${timeline}-min`).html(`min: ${tempFahrMin.toFixed(1)}`).attr("data-temp", tempKelvinMin);
     $(`#${timeline}-max`).html(`max: ${tempFahrMax.toFixed(1)}`).attr("data-temp", tempKelvinMax);
     $(`#${timeline}-feels`).html(`Feels like ${tempFahrFeels.toFixed(1)}`).attr("data-temp", tempKelvinFeels);
+    $(`#${timeline}-humidity`).html(`${humidity}%`);
+    $(`#${timeline}-wind-speed`).html(`${windSpeed} mph ${windDirection}`);
 }
 
 /* On click function to display */
 $(document).on("click", ".dropdown-item", function(event) {
     console.log($(this).data("location"));
     const clickedLocation = $(this).data("location");
-    displayCurrentWeather(clickedLocation);
+    getCurrentWeather(clickedLocation);
 })
+
+
+// Test
+// $("div[id*='-temp']").html("hello")
 
 /*######## Additional function ########*/
 
