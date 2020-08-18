@@ -329,7 +329,7 @@ const displayIcon = (data, timeline) => {
     const iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png";
     $(`#${timeline}-icon`).attr("src", iconURL);
     $(`#${timeline}-main`).html(`<span class="font-weight-bold">${main}</span>`);
-    $(`#${timeline}-description`).html(description);
+    $(`#${timeline}-description`).html(capitalize(description));
 }
 
 const displayWeather = (tempKelvin, tempKelvinMax, tempKelvinMin, tempKelvinFeels, humidity, windSpeed, windDirection, timeline) => {
