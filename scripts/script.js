@@ -156,7 +156,7 @@ $("#search-form").on("submit", (event) => {
 /* Current weather data */
 var getCurrentWeather = (cityName) => {
     // Set Google Search url
-    $("#web-results").attr("href", `http://www.google.com/search?q=${cityName}+weather`);
+    $("#web-results").attr("href", `https://www.google.com/search?q=${cityName}+weather`);
 
     const CURRENT_QUERY_URL = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${OW_API_KEY}`;
     $.ajax({
@@ -257,7 +257,7 @@ const getCardData = (response) => {
 
         // Get main, icon, description
         const iconCode = dailyData[i].weather[0].icon;
-        $(`#daily-icon-${i + 1}`).attr("src", "http://openweathermap.org/img/wn/" + iconCode + ".png");
+        $(`#daily-icon-${i + 1}`).attr("src", "https://openweathermap.org/img/wn/" + iconCode + ".png");
         descriptionCapitalized = capitalize(dailyData[i].weather[0].description)
         $(`#daily-description-${i + 1}`).html(descriptionCapitalized);
 
@@ -326,7 +326,7 @@ const displayIcon = (data, timeline) => {
     const iconCode = data.weather[0].icon;
     const main = data.weather[0].main;
     const description = data.weather[0].description;
-    const iconURL = "http://openweathermap.org/img/wn/" + iconCode + ".png";
+    const iconURL = "https://openweathermap.org/img/wn/" + iconCode + ".png";
     $(`#${timeline}-icon`).attr("src", iconURL);
     $(`#${timeline}-main`).html(`<span class="font-weight-bold">${main}</span>`);
     $(`#${timeline}-description`).html(capitalize(description));
