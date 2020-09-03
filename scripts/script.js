@@ -123,7 +123,6 @@ $('#dismiss').on('click', function () {
     $('.overlay').removeClass('active');
 });
 /*######## Open Weather API ########*/
-require('dotenv').config()
 /* Current weather data */
 const OW_API_KEY = "de36e36780976652d3e84a5502633fce";
 const NUMBER_OF_DAYS = 5;
